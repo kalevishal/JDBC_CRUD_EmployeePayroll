@@ -12,6 +12,7 @@ public class EmployeePayrollService {
         employeePayrollService.getConnection();
         employeePayrollService.insertData();
         employeePayrollService.retrieveData();
+        employeePayrollService.updateSalary();
     }
 
     private void retrieveData() throws SQLException {
@@ -24,10 +25,10 @@ public class EmployeePayrollService {
         EmployeeRepo.getConnection();
     }
 
-    //    private void updateSalary() {
-//        EmployeeRepo.updateSalary(3,3000);
-//    }
-//
+    private void updateSalary() {
+        EmployeeRepo.updateSalary(9,9000);
+    }
+
     private void insertData() {
         EmployeeInfo employeeInfo= new EmployeeInfo();
         employeeInfo.setName("Trupti");

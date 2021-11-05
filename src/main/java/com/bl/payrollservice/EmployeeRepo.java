@@ -1,9 +1,8 @@
 package com.bl.payrollservice;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EmployeeRepo {
     static Connection getConnection() {
@@ -20,5 +19,48 @@ public class EmployeeRepo {
             System.out.println(e);
         }
         return connection;
+    }
+
+    public void insertData(EmployeeInfo info) {
+        try (Connection connection = getConnection()) {
+            Statement statement = connection.createStatement();
+            String sql = "insert into employee(name,gender,startDate,phone,address) " +
+                    "values ('" + info.getName() + "','" + info.getGender() + "'," +
+                    "'" + info.getStartDate() + "','" + info.getPhone() + "'," +
+                    "'" + info.getAddress() + "'); ";
+            int result = statement.executeUpdate(sql);
+            if (result == 1) {
+                System.out.println("Query inserted");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    public List<EmployeeInfo> retrieveData() {
+        ResultSet resultSet = null;
+        List<EmployeeInfo> employeeInfoList = new ArrayList<>(
+
+        );
+        try (Connection connection = getConnection()) {
+            Statement statement = connection.createStatement();
+            String sql = "select * from employee";
+            resultSet = statement.executeQuery(sql);
+            int count = 1;
+            while (resultSet.next()) {
+                count++;
+                EmployeeInfo employeeInfo = new EmployeeInfo();
+                employeeInfo.setId(resultSet.getInt("id"));
+                employeeInfo.setName(resultSet.getString("name"));
+                employeeInfo.setGender(resultSet.getString("gender").charAt(0));
+                employeeInfo.setStartDate(resultSet.getDate("startDate").toLocalDate());
+                employeeInfoList.add(employeeInfo);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return employeeInfoList;
+
+
     }
 }
